@@ -1,0 +1,33 @@
+<% include header %>
+
+    <div class="columns is-centered">
+      <div class="column is-half-tablet is-narrow">
+        <div id="current-weather" class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-96x96">
+                  <img v-bind:src="'/img/' + icon" id="icon" alt="Summary image">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="is-size-6-mobile has-text-grey-light" v-text="time"></p>
+                <h1 class="title is-size-4-mobile is-size-3-tablet" v-text="temperature"></h1>
+                <p class="subtitle is-size-6-mobile is-size-5-tablet" v-text="summary"></p>
+                <p class="is-size-7 has-text-right">
+                  <a href="https://darksky.net/poweredby/">Powered by Dark Sky</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone-with-data.min.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>
