@@ -2,7 +2,7 @@
   "name": "local-weather",
   "version": "0.1.0",
   "author": "Cassiano Kuplich",
-  "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "start": "nodemon app.js"
   },
