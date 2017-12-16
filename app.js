@@ -22,7 +22,22 @@ const DarkSky = require('dark-sky')
 const darkSky = new DarkSky(process.env.DARK_SKY)
 
 const app = express()
+
+app.enable('trust proxy')
+app.disable('x-powered-by')
 app.set('port', process.env.PORT || 3000)
+
+if (process.env.NODE_ENV === 'production') {
+  const enforceSSL = require('express-enforces-ssl')
+  const helmet = require('helmet')
+  const ms = require('ms')
+
+  app.use(enforceSSL())
+  app.use(helmet.hsts({
+    maxAge: ms('1 year'),
+    includeSubdomains: true
+  }))
+}
 
 app.use(express.static(path.resolve(__dirname, 'public')))
 

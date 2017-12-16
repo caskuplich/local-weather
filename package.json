@@ -4,13 +4,18 @@
   "author": "Cassiano Kuplich",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "production": "forever app.js"
   },
   "dependencies": {
     "dark-sky": "^1.1.2",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.7",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "express-enforces-ssl": "^1.1.0",
+    "forever": "^0.15.3",
+    "helmet": "^3.9.0",
+    "ms": "^2.1.1"
   },
   "devDependencies": {
     "eslint": "^4.13.1",
