@@ -1,28 +1,24 @@
 <% include header %>
 
-    <div class="columns is-centered">
-      <div class="column is-half-tablet is-narrow">
-        <div id="current-weather" class="card">
-          <div class="card-content">
-            <div class="media">
-              <div class="media-left">
-                <figure class="image is-96x96">
-                  <img v-bind:src="'/img/' + icon" id="icon" alt="Summary image">
-                </figure>
+    <main class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-6">
+          <div class="card" id="current-weather">
+            <div class="card-body">
+              <div class="media">
+                <img class="mr-3" width="96" height="96" v-bind:src="'/img/' + icon" id="icon" alt="Summary icon">
+                <div class="media-body">
+                  <h1 v-text="temperature"></h1>
+                  <p v-text="summary"></p>
+                  <p class="text-muted" v-text="time"></p>
+                </div>
               </div>
-              <div class="media-content">
-                <p class="is-size-6-mobile has-text-grey-light" v-text="time"></p>
-                <h1 class="title is-size-4-mobile is-size-3-tablet" v-text="temperature"></h1>
-                <p class="subtitle is-size-6-mobile is-size-5-tablet" v-text="summary"></p>
-                <p class="is-size-7 has-text-right">
-                  <a href="https://darksky.net/poweredby/">Powered by Dark Sky</a>
-                </p>
-              </div>
+              <p class="card-text text-right"><small><a href="https://darksky.net/poweredby/">Powered by Dark Sky</a></small></p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
