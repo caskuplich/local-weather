@@ -1,21 +1,56 @@
 <% include header %>
 
-    <main class="container-fluid">
+    <main class="container-fluid" id="app">
       <div class="row justify-content-center">
         <div class="col-12 col-sm-10 col-md-6">
-          <div class="card" id="current-weather">
-            <div class="card-body">
-              <div class="media">
-                <img class="mr-3" width="96" height="96" v-bind:src="'/img/' + icon" id="icon" alt="Summary icon">
-                <div class="media-body">
-                  <h1 v-text="temperature"></h1>
-                  <p v-text="summary"></p>
-                  <p class="text-muted" v-text="time"></p>
+          <template v-if="errors.location">
+            <div class="alert alert-warning p-4 my-5" role="alert">
+              <span class="h5">Não foi possível obter sua localização</span>
+            </div>
+          </template>
+          <template v-else-if="errors.server">
+            <div class="alert alert-danger p-4 my-5" role="alert">
+              <h1 class="alert-heading">Erro inesperado!</h1>
+              <p>
+                Aparentemente um problema desconhecido está causando esse erro.
+                Por favor, tente novamente mais tarde.
+              </p>
+            </div>
+          </template>
+          <template v-else>
+            <div class="my-5" v-if="!currently">
+              <h1>Carregando...</h1>
+            </div>
+            <div class="card" v-else>
+              <div class="card-header">
+                Agora
+              </div>
+              <div class="card-body">
+                <div class="media">
+                  <img class="mr-3" width="96" height="96" v-bind:src="'/img/' + currently.icon" id="icon" alt="Summary icon">
+                  <div class="media-body">
+                    <h1 v-text="currently.temperature"></h1>
+                    <p v-text="currently.summary"></p>
+                    <p class="text-muted" v-text="currently.time"></p>
+                  </div>
                 </div>
               </div>
-              <p class="card-text text-right"><small><a href="https://darksky.net/poweredby/">Powered by Dark Sky</a></small></p>
             </div>
-          </div>
+            <div class="card" v-if="hourly.length > 0">
+              <div class="card-header">
+                Próximas horas
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in hourly">
+                  <span v-text="item.time"></span>
+                  <span>
+                    {{ item.temperature }}
+                    <img v-bind:src="'/img/' + item.icon" width="48" height="48" alt="Summary icon">
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </template>
         </div>
       </div>
     </main>
@@ -25,5 +60,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.4/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone-with-data.min.js"></script>
     <script src="/main.js"></script>
-  </body>
-</html>
+
+<% include footer %>

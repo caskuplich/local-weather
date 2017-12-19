@@ -14,27 +14,36 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-unused-vars */
-const currentWeather = new Vue({
-  /* eslint-enable no-unused-vars */
-  el: '#current-weather',
+/**
+ * Helper function that returns a Unix time (in seconds) formatted as HH:mm.
+ * @param  {Number} time     Unix time in seconds
+ * @param  {String} timezone IANA timezone name
+ * @return {String}          time formatted as HH:mm
+ */
+function getFormattedTime (time, timezone) {
+  return moment.tz(moment.unix(time), timezone).format('HH:mm')
+}
+
+/* eslint-disable no-new */
+new Vue({
+  /* eslint-enable no-new */
+  el: '#app',
   data: {
-    icon: 'loading.svg',
-    time: '...',
-    temperature: '...',
-    summary: '...'
+    currently: null,
+    hourly: [],
+    errors: {
+      location: false,
+      server: false
+    }
   },
   created: function () {
-    this.fetchCurrentWeather()
+    this.fetchWeatherInfo()
   },
   methods: {
-    positionError: function () {
-      this.icon = 'location-error.svg'
-      this.time = ''
-      this.temperature = 'Erro'
-      this.summary = 'Não foi possível obter sua localização'
+    locationError: function () {
+      this.errors.location = true
     },
-    fetchCurrentWeather: function () {
+    fetchWeatherInfo: function () {
       if ('geolocation' in navigator) {
         const self = this
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -44,17 +53,26 @@ const currentWeather = new Vue({
           axios.get('/' + latitude + ',' + longitude)
             .then(function (response) {
               const data = response.data
-              self.icon = data.icon + '.svg'
-              self.time = moment.tz(moment.unix(data.time), data.timezone).format('HH:mm')
-              self.summary = data.summary
-              self.temperature = data.temperature + '°'
+              self.currently = {
+                icon: data.currently.icon + '.svg',
+                time: getFormattedTime(data.currently.time, data.timezone),
+                summary: data.currently.summary,
+                temperature: data.currently.temperature + '°'
+              }
+              self.hourly = response.data.hourly.map((item) => {
+                return {
+                  icon: item.icon + '.svg',
+                  time: getFormattedTime(item.time, data.timezone),
+                  temperature: item.temperature + '°'
+                }
+              })
             })
             .catch(function () {
-              self.temperature = 'Erro!'
+              self.errors.server = true
             })
-        }, this.positionError)
+        }, this.locationError)
       } else {
-        this.positionError()
+        this.locationError()
       }
     }
   }

@@ -58,14 +58,24 @@ app.get(/^\/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)$/, function (req, res, next) {
     .longitude(longitude)
     .units('auto')
     .language('pt')
+    .exclude('minutely,daily')
     .get()
     .then((data) => {
       res.json({
-        icon: data.currently.icon,
-        summary: data.currently.summary,
-        temperature: data.currently.temperature,
-        time: data.currently.time,
-        timezone: data.timezone
+        timezone: data.timezone,
+        currently: {
+          icon: data.currently.icon,
+          time: data.currently.time,
+          temperature: data.currently.temperature,
+          summary: data.currently.summary
+        },
+        hourly: data.hourly.data.map((item) => {
+          return {
+            icon: item.icon,
+            time: item.time,
+            temperature: item.temperature
+          }
+        })
       })
     })
     .catch((err) => {
